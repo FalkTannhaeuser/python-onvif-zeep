@@ -12,8 +12,8 @@ from zeep.client import Client, CachingClient
 from zeep.wsse.username import UsernameToken
 import zeep.helpers
 
-from exceptions import ONVIFError
-from definition import SERVICES
+from onvif.exceptions import ONVIFError
+from onvif.definition import SERVICES
 #from suds.sax.date import UTC
 import datetime as dt
 # Ensure methods to raise an ONVIFError Exception
