@@ -29,9 +29,6 @@ CLASSIFIERS = [
 ]
 
 wsdl_files = [os.path.join('wsdl', item) for item in os.listdir('wsdl')]
-wsdl_dst_dir = 'Lib/site-packages/wsdl' if sys.platform == 'win32' else \
-               'lib/python%d.%d/site-packages/wsdl' % (sys.version_info.major,
-                                                       sys.version_info.minor)
 
 setup(
       name='onvif_zeep',
@@ -49,7 +46,7 @@ setup(
       packages=find_packages(exclude=['docs', 'examples', 'tests']),
       install_requires=requires,
       include_package_data=True,
-      data_files=[(wsdl_dst_dir, wsdl_files)],
+      data_files=[('wsdl', wsdl_files)],
       entry_points={
           'console_scripts': ['onvif-cli = onvif.cli:main']
           }
