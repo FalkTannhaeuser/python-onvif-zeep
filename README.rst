@@ -1,27 +1,24 @@
-python-onvif
+python-onvif-zeep
 ============
 
 ONVIF Client Implementation in Python
 
 Dependencies
 ------------
-`suds <https://pypi.python.org/pypi/suds>`_ >= 0.4
+`zeep <http://docs.python-zeep.org>`_ >= 3.0.0
 
-`suds-passworddigest <https://pypi.python.org/pypi/suds_passworddigest>`_
-
-Install python-onvif
---------------------
+Install python-onvif-zeep
+-------------------------
 **From Source**
 
 You should clone this repository and run setup.py::
 
-    cd python-onvif && python setup.py install
+    cd python-onvif-zeep && python setup.py install
 
-**From PyPI**
+Alternatively, you can run::
 
-::
+    pip install --upgrade onvif_zeep
 
-    pip install onvif
 
 Getting Started
 ---------------

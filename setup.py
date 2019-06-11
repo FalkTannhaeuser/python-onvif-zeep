@@ -1,11 +1,12 @@
 import os
 from setuptools import setup, find_packages
+import sys
 
 here = os.path.abspath(os.path.dirname(__file__))
 version_path = os.path.join(here, 'onvif/version.txt')
 version = open(version_path).read().strip()
 
-requires = [ 'suds >= 0.4', 'suds-passworddigest' ]
+requires = ['zeep >= 3.0.0']
 
 CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
@@ -22,14 +23,18 @@ CLASSIFIERS = [
     'Topic :: Utilities',
     "Programming Language :: Python",
     "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.6",
     "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
 ]
 
-wsdl_files = [ 'wsdl/' + item for item in os.listdir('wsdl') ]
+wsdl_files = [os.path.join('wsdl', item) for item in os.listdir('wsdl')]
+wsdl_dst_dir = 'Lib/site-packages/wsdl' if sys.platform == 'win32' else \
+               'lib/python%d.%d/site-packages/wsdl' % (sys.version_info.major,
+                                                       sys.version_info.minor)
 
 setup(
-      name='onvif',
+      name='onvif_zeep',
       version=version,
       description='Python Client for ONVIF Camera',
       long_description=open('README.rst', 'r').read(),
@@ -44,10 +49,8 @@ setup(
       packages=find_packages(exclude=['docs', 'examples', 'tests']),
       install_requires=requires,
       include_package_data=True,
-      data_files=[('wsdl', wsdl_files)],
+      data_files=[(wsdl_dst_dir, wsdl_files)],
       entry_points={
           'console_scripts': ['onvif-cli = onvif.cli:main']
           }
      )
-
-

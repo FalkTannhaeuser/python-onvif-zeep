@@ -1,16 +1,15 @@
 #!/usr/bin/python
 '''ONVIF Client Command Line Interface'''
-
+from __future__ import print_function, division
 import re
 from cmd import Cmd
 from ast import literal_eval
-from json import dumps
-from argparse import ArgumentParser, ArgumentError, REMAINDER
+from argparse import ArgumentParser, REMAINDER
 
-from suds import MethodNotFound
-from suds.sax.text import Text
+from zeep.exceptions import LookupError as MethodNotFound
+from zeep.xsd import String as Text
 from onvif import ONVIFCamera, ONVIFService, ONVIFError
-from definition import SERVICES
+from onvif.definition import SERVICES
 import os.path
 
 SUPPORTED_SERVICES = SERVICES.keys()
@@ -21,10 +20,10 @@ class ThrowingArgumentParser(ArgumentParser):
         raise ValueError("%s\n%s" % (message, usage))
 
 def success(message):
-    print 'True: ' + str(message)
+    print('True: ' + str(message))
 
 def error(message):
-    print 'False: ' + str(message)
+    print('False: ' + str(message))
 
 class ONVIFCLI(Cmd):
     prompt = 'ONVIF >>> '
@@ -151,7 +150,7 @@ def main():
     try:
         args = parser.parse_args()
     except ValueError as err:
-        print str(err)
+        print(str(err))
         return
     # Also need parse configuration file.
 
