@@ -1,10 +1,10 @@
-import asyncio, sys
+import sys
 from onvif import ONVIFCamera
 
-IP="192.168.0.100"   # Camera IP address
-PORT=10080           # Port
-USER="admin"         # Username
-PASS="password"        # Password
+IP = "192.168.0.100"   # Camera IP address
+PORT = 80           # Port
+USER = "admin"         # Username
+PASS = "password"        # Password
 
 
 XMAX = 1
@@ -94,6 +94,8 @@ def setup_move():
     moverequest.ProfileToken = media_profile.token
     if moverequest.Velocity is None:
         moverequest.Velocity = ptz.GetStatus({'ProfileToken': media_profile.token}).Position
+        moverequest.Velocity.PanTilt.space = ""
+        moverequest.Velocity.Zoom.space = ""
 
 
     # Get range of pan and tilt
@@ -109,7 +111,7 @@ def readin():
     """Reading from stdin and displaying menu"""
     global moverequest, ptz
     
-    selection = sys.stdin.readline().strip("\n")
+    selection = input()
     lov=[ x for x in selection.split(" ") if x != ""]
     if lov:
         
@@ -143,14 +145,7 @@ def readin():
             
 if __name__ == '__main__':
     setup_move()
-    loop = asyncio.get_event_loop()
-    try:
-        loop.add_reader(sys.stdin,readin)
-        print("Use Ctrl-C to quit")
-        print("Your command: ", end='',flush=True)
-        loop.run_forever()
-    except:
-        pass
-    finally:
-        loop.remove_reader(sys.stdin)
-        loop.close()
+    print("Use Ctrl-C to quit")
+    while True:
+        print("Your command: ", end="")
+        readin()
