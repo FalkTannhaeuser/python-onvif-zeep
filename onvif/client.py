@@ -13,7 +13,6 @@ from onvif.exceptions import ONVIFError
 from onvif.definition import SERVICES
 
 logger = logging.getLogger('onvif')
-logging.basicConfig(level=logging.INFO)
 logging.getLogger('zeep.client').setLevel(logging.CRITICAL)
 
 

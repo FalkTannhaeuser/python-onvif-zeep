@@ -1,6 +1,7 @@
 #!/usr/bin/python
 '''ONVIF Client Command Line Interface'''
 from __future__ import print_function, division
+import logging
 import re
 from cmd import Cmd
 from ast import literal_eval
@@ -13,6 +14,8 @@ from onvif.definition import SERVICES
 import os.path
 
 SUPPORTED_SERVICES = SERVICES.keys()
+
+logging.basicConfig(level=logging.INFO)
 
 class ThrowingArgumentParser(ArgumentParser):
     def error(self, message):
