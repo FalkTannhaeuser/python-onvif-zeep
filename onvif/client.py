@@ -242,7 +242,7 @@ class ONVIFCamera(object):
         for name in capabilities:
             try:
                 retrieved_address=capabilities[name].XAddr
-                # Extract eved address and port_address             
+                # Extract retrieved address and port_address             
                 parse = urlparse(retrieved_address)
                 ip_address = parse.hostname
                 port_address = parse.port
