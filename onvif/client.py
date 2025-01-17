@@ -4,6 +4,7 @@ import datetime as dt
 import logging
 import os.path
 from threading import Thread, RLock
+from urllib.parse import urlparse
 
 from zeep.client import Client, CachingClient, Settings
 from zeep.wsse.username import UsernameToken
@@ -243,8 +244,12 @@ class ONVIFCamera(object):
                 retrived_address=capabilities[name].XAddr
                 right=retrived_address.split("//")[1]
                 retrived_url=right.split("/")[0]
-                ip_address=retrived_url.split(":")[0]
-                port_address = retrived_url.split(":")[1]
+                ip_address = ""
+                port_address = urlparse(retrived_address).port or None
+                if  port_address:
+                    ip_address=retrived_url.split(":")[0]
+                else:
+                    ip_address=retrived_url.split("/")[0]
                 if (self.host != ip_address or self.port != port_address):
                     remaining=right.split("/")[1]
                     new_address="http://"+self.host+":"+str(self.port)+"/"+right.split("/")[1]+"/"+right.split("/")[2]
