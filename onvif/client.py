@@ -4,6 +4,7 @@ import datetime as dt
 import logging
 import os.path
 from threading import Thread, RLock
+from urllib.parse import urlparse
 
 from zeep.client import Client, CachingClient, Settings
 from zeep.wsse.username import UsernameToken
@@ -240,16 +241,16 @@ class ONVIFCamera(object):
         capabilities = self.devicemgmt.GetCapabilities({'Category': 'All'})
         for name in capabilities:
             try:
-                retrived_address=capabilities[name].XAddr
-                right=retrived_address.split("//")[1]
-                retrived_url=right.split("/")[0]
-                ip_address=retrived_url.split(":")[0]
-                port_address = retrived_url.split(":")[1]
+                retrieved_address=capabilities[name].XAddr
+                # Extract retrieved address and port_address             
+                parse = urlparse(retrieved_address)
+                ip_address = parse.hostname
+                port_address = parse.port
                 if (self.host != ip_address or self.port != port_address):
-                    remaining=right.split("/")[1]
-                    new_address="http://"+self.host+":"+str(self.port)+"/"+right.split("/")[1]+"/"+right.split("/")[2]
+                    new_netloc = "".join((self.host, ":", str(self.port)))
+                    new_address = parse._replace(netloc=new_netloc).geturl()
                     capabilities[name].XAddr=new_address
-            except:
+            except Exception as exc:
                 pass
             capability = capabilities[name]
             try:
@@ -339,7 +340,6 @@ class ONVIFCamera(object):
 
         name = name.lower()
         xaddr, wsdl_file, binding_name = self.get_definition(name, portType)
-
         with self.services_lock:
             if not transport:
                 transport = self.transport
