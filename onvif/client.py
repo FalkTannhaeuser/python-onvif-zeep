@@ -117,7 +117,9 @@ class ONVIFService(object):
         self.encrypt = encrypt
         self.daemon = daemon
         self.dt_diff = dt_diff
-        self.create_type = lambda x: self.zeep_client.get_element('ns0:' + x)()
+        self.namespace = binding_name[1:binding_name.index("}")]
+        self._namespace_prefix = self._get_namespace_prefix(self.namespace)
+        self.create_type = lambda x: self.zeep_client.get_element(self._namespace_prefix + ':' + x)()
 
     @classmethod
     @safe_func
@@ -170,6 +172,12 @@ class ONVIFService(object):
             return self.__dict__[name]
         else:
             return self.service_wrapper(getattr(self.ws_client, name))
+
+    def _get_namespace_prefix(self, namespace):
+        for prefix, name in self.zeep_client.namespaces.items():
+            if name == namespace:
+                return prefix
+        return "ns0"
 
 
 class ONVIFCamera(object):
