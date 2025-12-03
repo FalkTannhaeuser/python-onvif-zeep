@@ -43,7 +43,7 @@ class UsernameDigestTokenDtDiff(UsernameToken):
     def apply(self, envelope, headers):
         old_created = self.created
         if self.created is None:
-            self.created = dt.datetime.now(dt.UTC)
+            self.created = dt.datetime.now(dt.timezone.utc)
         if self.dt_diff is not None:
             self.created += self.dt_diff
         result = super().apply(envelope, headers)
